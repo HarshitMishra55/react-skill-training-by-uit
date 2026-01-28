@@ -14,11 +14,11 @@ function App() {
     <>
       <marquee><h1>Harshit Mishra</h1></marquee>
       <LiveSearchAPI />
-      {/* <SimpleList />
+      <SimpleList />
       <TodoList />
       <PaginatedList />
       <SearchWithDebounce />
-      <InfiniteScrolling /> */}
+      <InfiniteScrolling />
     </>
   )
 }
