@@ -4,6 +4,7 @@ import TodoList from './components/TodoList.jsx'
 import { PaginatedList } from './components/PaginatedList.jsx'
 import SearchWithDebounce from './components/SearchWithDebounce.jsx'
 import InfiniteScrolling from './components/InfiniteScrolling.jsx'
+import { LiveSearchAPI } from './components/LiveSearchApi.jsx'
 import './App.css'
 
 function App() {
@@ -12,11 +13,12 @@ function App() {
   return (
     <>
       <marquee><h1>Harshit Mishra</h1></marquee>
-      <SimpleList />
+      <LiveSearchAPI />
+      {/* <SimpleList />
       <TodoList />
       <PaginatedList />
       <SearchWithDebounce />
-      <InfiniteScrolling />
+      <InfiniteScrolling /> */}
     </>
   )
 }
