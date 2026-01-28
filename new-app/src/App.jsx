@@ -14,7 +14,7 @@ function App() {
       <marquee><h1>Harshit Mishra</h1></marquee>
       <SimpleList />
       <TodoList />
-      {/* <PaginatedList /> */}
+      <PaginatedList />
       <SearchWithDebounce />
       <InfiniteScrolling />
     </>
