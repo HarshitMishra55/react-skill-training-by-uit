@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
+import { getUsersPaginated } from '../api/userService';
 
-function PaginatedList() {
-
+export function PaginatedList() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
-    const [posts, setPosts] = useState([]);
+    const [users, setUsers] = useState([]);
 
     const POSTS_PER_PAGE = 10;
     const TOTAL_POSTS = 100;
@@ -15,20 +15,19 @@ function PaginatedList() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await fetch(
-                    "https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=${POSTS_PER_PAGE}"
-                );
-                if (!response.ok) {
-                    throw new Error("Failed to fetch posts.")
-                }
+                // const response = await fetch(
+                // https://reqres.in/api/users?page=${page}&per_page=${POSTS_PER_PAGE}, 
+                // { headers: { 'x-api-key': 'reqres_9c58e2a469fe4984bf1dc39255ee611d' } }
+                // );
+                const response = await getUsersPaginated(page, POSTS_PER_PAGE)
 
-                const data = await response.json();
-                setPosts(data);
-                setError(null);
+                const data = response.data.data;
+                setUsers(data);
             } catch (err) {
-                setError(err.message);
+                const errorMessage = err.response?.message || err.message || 'Failed to fetch the users';
+                setError(errorMessage);
             } finally {
-                setLoading = false;
+                setLoading(false);
             }
         };
 
@@ -78,11 +77,30 @@ function PaginatedList() {
 
             {!loading && !error && (
                 <div>
-                    {posts.map((post) => (
-                        <div key={post.id}>
-                            <h3>Post #{(page - 1) * POSTS_PER_PAGE + posts.indexOf(post) + 1}</h3>
-                            <h4>{post.title}</h4>
-                            <p>{post.body}</p>
+                    {users.map((user) => (
+                        <div key={user.id}>
+                            <table border={1} align="center">
+                                <tr>
+                                    <th colspan={3}>Post #{(page - 1) * POSTS_PER_PAGE + users.indexOf(user) + 1}</th>
+                                </tr>
+                                {/* <h4>{user.title}</h4>
+                                <p>{user.body}</p> */}
+                                <tr>
+                                    <td colSpan={3}>
+                                        <img
+                                            src={user.avatar}
+                                            alt={`${user.first_name} ${user.last_name}`}
+                                            style={{ width: '60px', height: '60px', borderRadius: '50%' }}
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><h3>{user.first_name} {user.last_name}</h3></td>
+                                    <td><p style={{ margin: '5px 0', color: '#666' }}>{user.email}</p></td>
+                                    <td><p style={{ margin: '5px 0', fontSize: '0.9em', color: '#888' }}>User ID: {user.id}</p></td>
+                                </tr>
+                            </table>
+                            <hr />
                         </div>
                     ))}
                 </div>
@@ -91,6 +109,7 @@ function PaginatedList() {
             <div className="page-jumper">
                 <p>Jump to page:</p>
                 <div className="page-buttons">
+                    {/* Create buttons for each page */}
                     {[...Array(totalPages)].map((_, index) => {
                         const pageNum = index + 1;
                         return (
@@ -101,11 +120,11 @@ function PaginatedList() {
                                 disabled={loading}
                             >
                                 {pageNum}
-                            </button>);
+                            </button>
+                        );
                     })}
                 </div>
             </div>
         </div>
     );
 };
-export default PaginatedList
